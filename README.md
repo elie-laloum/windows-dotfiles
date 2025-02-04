@@ -327,18 +327,25 @@ Restart your shell, dont reload zsh process restart your terminal (.zprofile is 
 docker ps -a
 ```
 
-### Nginx
+### Apache
 
-Install Nginx
+Install Apache
 
 ```shell
-sudo apt install nginx
+sudo apt install apache2
+
+# Add php support
+sudo apt install libapache2-mod-php8.2
+
+# Enable fpm support
+sudo a2enmod proxy_fcgi setenvif
+sudo a2enconf php8.2-fpm
 ```
 
-You can verify that nginx is running via this command:
+You can verify that apache is running via this command:
 
 ```shell
-sudo systemctl status nginx
+sudo service apache2 status
 ```
 
 

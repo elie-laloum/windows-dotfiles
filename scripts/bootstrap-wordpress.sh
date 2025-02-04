@@ -9,8 +9,7 @@ fi
 PROJECT_NAME=$1
 THEME_PATH=$2
 WORDPRESS_DIR="/var/www/html/$PROJECT_NAME"
-NGINX_CONF="/etc/nginx/sites-available/$PROJECT_NAME"
-NGINX_CONF_ENABLED="/etc/nginx/sites-enabled/$PROJECT_NAME"
+APACHE_CONF="/etc/apache2/sites-available/$PROJECT_NAME.conf"
 DB_NAME="${PROJECT_NAME}_wp"
 DB_USER="admin"
 DB_PASSWORD="password"
@@ -40,35 +39,34 @@ rm twentytwentyfour.zip
 sudo chown -R www-data:www-data $WORDPRESS_DIR
 sudo chmod -R 755 $WORDPRESS_DIR
 
-# Create Nginx configuration
-sudo tee $NGINX_CONF > /dev/null <<EOL
-server {
-    listen 80;
-    server_name localhost;
+# Create Apache configuration for serving under a subdirectory
+sudo tee $APACHE_CONF > /dev/null <<EOL
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/html
 
-    root /var/www/html/$PROJECT_NAME;
-    index index.php index.html index.htm;
+    <Directory /var/www/html>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-    location / {
-        try_files \$uri \$uri/ /index.php?\$args;
-    }
+    Alias /$PROJECT_NAME "$WORDPRESS_DIR"
+    <Directory "$WORDPRESS_DIR">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
 
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        include fastcgi_params;
-    }
-
-    location ~ /\.ht {
-        deny all;
-    }
-}
+    ErrorLog \${APACHE_LOG_DIR}/error.log
+    CustomLog \${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
 EOL
 
-# Enable Nginx configuration
-sudo ln -s $NGINX_CONF $NGINX_CONF_ENABLED
-sudo nginx -t && sudo systemctl reload nginx
+# Enable Apache configuration
+sudo a2ensite $PROJECT_NAME.conf
+sudo a2enmod rewrite
+sudo systemctl reload apache2
 
 # Create MySQL database using docker exec with root
 docker exec -i mariadb mariadb -uroot -ppassword <<EOF
@@ -83,6 +81,12 @@ sudo sed -i "s/database_name_here/$DB_NAME/g" $WORDPRESS_DIR/wp-config.php
 sudo sed -i "s/username_here/$DB_USER/g" $WORDPRESS_DIR/wp-config.php
 sudo sed -i "s/password_here/$DB_PASSWORD/g" $WORDPRESS_DIR/wp-config.php
 sudo sed -i "s/localhost/$DB_HOST/g" $WORDPRESS_DIR/wp-config.php
+
+# Update WordPress site URL and home URL
+sudo tee -a $WORDPRESS_DIR/wp-config.php > /dev/null <<EOL
+define('WP_HOME', 'http://localhost/$PROJECT_NAME');
+define('WP_SITEURL', 'http://localhost/$PROJECT_NAME');
+EOL
 
 # Create symlink for theme
 sudo ln -s $WORDPRESS_DIR/wp-content/themes/twentytwentyfour $THEME_PATH
