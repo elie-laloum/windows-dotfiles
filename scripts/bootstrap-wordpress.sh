@@ -66,7 +66,7 @@ EOL
 # Enable Apache configuration
 sudo a2ensite $PROJECT_NAME.conf
 sudo a2enmod rewrite
-sudo systemctl reload apache2
+sudo service apache2 reload 
 
 # Create MySQL database using docker exec with root
 docker exec -i mariadb mariadb -uroot -ppassword <<EOF

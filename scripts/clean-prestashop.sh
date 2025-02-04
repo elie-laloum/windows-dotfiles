@@ -6,21 +6,21 @@ if [ "$#" -ne 1 ]; then
 fi
 
 PROJECT_NAME=$1
-WORDPRESS_DIR="/var/www/html/$PROJECT_NAME"
+PRESTASHOP_DIR="/var/www/html/$PROJECT_NAME"
 APACHE_CONF="/etc/apache2/sites-available/$PROJECT_NAME.conf"
-DB_NAME="${PROJECT_NAME}_wp"
+DB_NAME="${PROJECT_NAME}_ps"
 
-# Remove WordPress files
-sudo rm -rf $WORDPRESS_DIR
+# Remove PrestaShop files
+sudo rm -rf $PRESTASHOP_DIR
 
 # Remove Apache configuration
 sudo rm -f $APACHE_CONF
 sudo a2dissite $PROJECT_NAME.conf > /dev/null 2>&1
-sudo service apache2 reload 
+sudo systemctl reload apache2
 
 # Drop database
 docker exec -i mariadb mariadb -uadmin -ppassword <<EOF
 DROP DATABASE IF EXISTS $DB_NAME;
 EOF
 
-echo "WordPress project '$PROJECT_NAME' has been cleaned up!"
+echo "PrestaShop project '$PROJECT_NAME' has been cleaned up!"

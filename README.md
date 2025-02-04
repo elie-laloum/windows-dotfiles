@@ -120,6 +120,12 @@ sudo apt install \
     php-cli \
     php-bz2 \
     php-xml \
+    php-mysql \
+    php-zip \
+    php-curl \
+    php-gd \
+    php-intl \
+    php-mbstring \
     php-enchant \
     autoconf \
     automake \
@@ -542,7 +548,7 @@ rm supabase_${SUPABASE_CLI_VERSION}_linux_amd64.deb
 
 ### Dev instances
 
-Copy compose file from `docker/docker-compose.yml` to `/opt/docker-compose.yml` and launch it with:
+Copy compose file `docker/docker-compose.yml` from this repository to `/opt/docker-compose.yml` and launch it with:
 
 ```shell
 cd /opt
@@ -552,13 +558,23 @@ docker compose up -d
 
 This compose file install a mariadb, postgresql, mongodb, redis, and mailhog services with according UI's.
 
+### Scripts
 
+Copy scripts directory `scripts` from this repository to `~/.scripts`.
 
-install script new wordpress
-install script new prestashop
-
-configure vscode
+Make them executable:
 
 ```shell
-
+chmod +x ~/.scripts/*
 ```
+
+You can now bootstrap and clean new wordpress and prestashop projects via:
+
+```shell
+sh ~/.scripts/bootstrap-wordpress.sh
+```
+
+## VSCode
+
+### Settings
+
