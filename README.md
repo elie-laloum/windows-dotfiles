@@ -572,7 +572,18 @@ You can now bootstrap and clean new wordpress and prestashop projects via:
 
 ```shell
 sh ~/.scripts/bootstrap-wordpress.sh
+sh ~/.scripts/clean-wordpress.sh
+sh ~/.scripts/bootstrap-prestashop.sh
+sh ~/.scripts/clean-prestashop.sh
 ```
+
+### SSH
+
+### GPG
+
+### Dev folders
+
+### Git
 
 ## VSCode
 
