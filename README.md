@@ -579,13 +579,90 @@ sh ~/.scripts/bootstrap-prestashop.sh
 sh ~/.scripts/clean-prestashop.sh
 ```
 
+### Dev folders
+
+We need to initialize our dev folders architecture
+
+```shell
+mkdir -p ~/dev/github
+
+# Create many folders as needed
+mkdir -p ~/dev/github/elie.laloum
+```
+
 ### SSH
+
+Now create as many ssh key as needed (one is enough for git even if you've got multiple provider).
+Make multiple if you've got multiple email as account:
+
+```shell
+take .ssh
+
+ssh-keygen -t ed25519 -C "email@domain.tld"
+
+ssh-add <privatekeyfile>
+```
 
 ### GPG
 
-### Dev folders
+[More informations on how to create and use gpg key here.](https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key)
+
+Now create as many gpg key as needed.
+Make multiple if you've got multiple email as account:
+
+```shell
+# generate a new key
+gpg --full-generate-key
+
+# retrieve your key
+gpg --list-secret-keys --keyid-format=long
+
+# It will give you an entry for each key (check email to find needed one)
+# > sec rsa4096/0000000000000001 1900-01-01 [SC]
+# Here 0000000000000001 is the short id
+
+# Retrieve GPG Key ID
+gpg --armor --export 0000000000000001
+
+# Use it where you need to, Github ...
+```
 
 ### Git
+
+We need to create custom git configurations for each dev folder/account/provider if needed:
+
+```shell
+# Create base .gitconfig file
+touch .gitconfig
+
+# Create custom .gitconfig files based on needs
+touch .gitconfig-github-elie-laloum
+
+# Define dirs rules for each custom config
+nano .gitconfig
+
+# Add in .gitconfig this block and change informations as needed
+
+[includeIf "gitdir:~/dev/github/elie.laloum/"]
+    path = .gitconfig-github-elie-laloum
+
+# where ~/dev/github/elie.laloum/ is your dev folder and .gitconfig-github-elie-laloum is the custom .gitconfig file
+
+# Define git rules for each custom config
+nano .gitconfig-github-elie-laloum
+
+# Add this in opened file
+[user]
+    name = Elie Laloum
+    email = email@domain.tld
+    signingkey = <gpgkeyshortid>
+[commit]
+    gpgsign = true
+[tag]
+    gpgSign = true
+[core]
+    sshCommand = ssh -i ~/.ssh/<sshkey>
+```
 
 ## VSCode
 
@@ -593,3 +670,17 @@ sh ~/.scripts/clean-prestashop.sh
 
 Open your `settings.json` from VSCode and copy/paste content from `vscode/settings.json` in this repository.
 
+### Extensions
+
+Install VSCode extensions by retrieving files `vscode/extensions.yaml` and `vscode/install-extensions.sh` in this repository to your wsl home folder (script need to access code bin) then:
+
+```shell
+# make script executable
+chmod +x install-extensions.sh
+
+# run script
+./install-extensions.sh
+
+# cleanup
+rm extensions.yaml install-extensions.sh
+```

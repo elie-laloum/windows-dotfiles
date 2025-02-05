@@ -753,11 +753,11 @@
       "added": true
     },
     "[typescriptreact]": {
-      // "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.vscode-eslint"
     },
     "github.copilot.editor.enableAutoCompletions": true,
     "[javascript]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode"
+      "editor.defaultFormatter": "esbenp.vscode-eslint"
     },
     "editor.formatOnPaste": true,
     "editor.formatOnType": true,
