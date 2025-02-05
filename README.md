@@ -153,6 +153,7 @@ sudo apt install \
     libbz2-dev \
     libcurl4-gnutls-dev \
     libzip-dev \
+    jq yq \
     -y
 ```
 
@@ -211,8 +212,9 @@ echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.clou
 sudo apt update && sudo apt install google-cloud-cli
 ```
 
+Add this to your `~/.zshrc` file or copy `zsh/.zshrc` from this repository your local one
+
 ```shell
-# Add this to your ~/.zshrc file or copy zsh/.zshrc from this repository your local one
 plugins=(
     autoenv
     autojump
@@ -588,4 +590,6 @@ sh ~/.scripts/clean-prestashop.sh
 ## VSCode
 
 ### Settings
+
+Open your `settings.json` from VSCode and copy/paste content from `vscode/settings.json` in this repository.
 
