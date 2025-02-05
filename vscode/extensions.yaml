@@ -42,6 +42,9 @@ extensions:
   - github.vscode-github-actions
   - github.vscode-pull-request-github
   - gruntfuggly.todo-tree
+  - golang.go
+  - Orta.vscode-jest
+  - nguyenngoclong.terminal-keeper
   - gurumukhi.selected-lines-count
   - herrmannplatz.npm-dependency-links
   - humao.rest-client
