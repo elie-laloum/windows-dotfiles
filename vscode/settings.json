@@ -726,6 +726,7 @@
     "editor.suggest.preview": true,
     "editor.suggest.showStatusBar": true,
     "editor.suggest.snippetsPreventQuickSuggestions": true,
+    "explorer.compactFolders": false,
     "path-intellisense.autoTriggerNextSuggestion": true,
     "emmet.useInlineCompletions": true,
     "editor.suggest.matchOnWordStartOnly": false,
