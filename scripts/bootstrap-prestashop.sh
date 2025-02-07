@@ -13,7 +13,8 @@ APACHE_CONF="/etc/apache2/sites-available/$PROJECT_NAME.conf"
 DB_NAME="${PROJECT_NAME}_ps"
 DB_USER="admin"
 DB_PASSWORD="password"
-DB_HOST="mariadb"
+DB_HOST="172.20.0.2"
+CURRENT_USER=$(whoami)
 
 # Create PrestaShop directory with sudo
 sudo mkdir -p $PRESTASHOP_DIR
@@ -25,9 +26,15 @@ unzip prestashop_8.2.0.zip
 sudo unzip prestashop.zip -d $PRESTASHOP_DIR
 rm -rf prestashop_8.2.0.zip prestashop.zip Install_PrestaShop.html index.php
 
-# Set permissions
-sudo chown -R www-data:www-data $PRESTASHOP_DIR
-sudo chmod -R 755 $PRESTASHOP_DIR
+# Set permissions for PrestaShop directory
+sudo chown -R $CURRENT_USER:www-data $PRESTASHOP_DIR
+sudo chmod -R 775 $PRESTASHOP_DIR
+
+# Set the correct permissions for the cache and log directories
+sudo chown -R www-data:www-data $PRESTASHOP_DIR/var/cache
+sudo chown -R www-data:www-data $PRESTASHOP_DIR/var/logs
+sudo chmod -R 775 $PRESTASHOP_DIR/var/cache
+sudo chmod -R 775 $PRESTASHOP_DIR/var/logs
 
 # Create Apache configuration for serving under a subdirectory
 sudo tee $APACHE_CONF > /dev/null <<EOL
@@ -76,6 +83,10 @@ echo "Database password: $DB_PASSWORD"
 # Create symlink for theme (after installation)
 echo "After installation, create a symlink for the theme:"
 echo "sudo ln -s $PRESTASHOP_DIR/themes/classic $THEME_PATH"
+
+# Set permissions for the theme directory
+sudo chown -R $CURRENT_USER:www-data $THEME_PATH
+sudo chmod -R 775 $THEME_PATH
 
 echo "PrestaShop project '$PROJECT_NAME' has been successfully set up!"
 echo "You can access it at http://localhost/$PROJECT_NAME"

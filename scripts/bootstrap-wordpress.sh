@@ -13,7 +13,7 @@ APACHE_CONF="/etc/apache2/sites-available/$PROJECT_NAME.conf"
 DB_NAME="${PROJECT_NAME}_wp"
 DB_USER="admin"
 DB_PASSWORD="password"
-DB_HOST="mariadb"
+DB_HOST="172.20.0.2"
 
 # Create WordPress directory with sudo
 sudo mkdir -p $WORDPRESS_DIR
@@ -66,7 +66,7 @@ EOL
 # Enable Apache configuration
 sudo a2ensite $PROJECT_NAME.conf
 sudo a2enmod rewrite
-sudo service apache2 reload 
+sudo service apache2 reload
 
 # Create MySQL database using docker exec with root
 docker exec -i mariadb mariadb -uroot -ppassword <<EOF
