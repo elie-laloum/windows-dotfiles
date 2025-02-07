@@ -1,6 +1,7 @@
 extensions:
   - al3xcubed.annotation-lens-cubed
   - alefragnani.project-manager
+  - aswinkumar863.smarty-template-support
   - alfredbirk.instant-docs
   - antfu.file-nesting
   - PKief.material-icon-theme
